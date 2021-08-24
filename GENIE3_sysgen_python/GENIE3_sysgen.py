@@ -1,5 +1,5 @@
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
-from sklearn.tree.tree import BaseDecisionTree
+from sklearn.tree import BaseDecisionTree
 from numpy import *
 import time
 from operator import itemgetter
@@ -15,7 +15,7 @@ def compute_feature_importances(estimator):
     else:
         importances = [e.tree_.compute_feature_importances(normalize=False)
                        for e in estimator.estimators_]
-        importances = asarray(importances)
+        importances = array(importances)
         return sum(importances,axis=0) / len(estimator)
 
 
