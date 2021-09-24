@@ -69,7 +69,7 @@ def get_link_list(VIM,gene_names=None,regulators='all',maxcount='all',file_name=
         elif len(gene_names) != ngenes:
             raise ValueError('input argument gene_names must be a list of length p, where p is the number of columns/genes in the expression data')
         
-    if regulators is not 'all':
+    if regulators != 'all':
         if not isinstance(regulators,(list,tuple)):
             raise ValueError('input argument regulators must be a list of gene names')
 
@@ -80,7 +80,7 @@ def get_link_list(VIM,gene_names=None,regulators='all',maxcount='all',file_name=
             if not sIntersection:
                 raise ValueError('The genes must contain at least one candidate regulator')
         
-    if maxcount is not 'all' and not isinstance(maxcount,int):
+    if maxcount != 'all' and not isinstance(maxcount,int):
         raise ValueError('input argument maxcount must be "all" or a positive integer')
         
     if file_name is not None and not isinstance(file_name,str):
@@ -90,7 +90,7 @@ def get_link_list(VIM,gene_names=None,regulators='all',maxcount='all',file_name=
 
     # Get the indices of the candidate regulators
     if regulators == 'all':
-        input_idx = range(ngenes)
+        input_idx = list(list(range(ngenes)))
     else:
         input_idx = [i for i, gene in enumerate(gene_names) if gene in regulators]
                
@@ -150,13 +150,13 @@ def get_link_list(VIM,gene_names=None,regulators='all',maxcount='all',file_name=
                 (TF_idx,target_idx,score) = vInter_sort[i]
                 TF_idx = int(TF_idx)
                 target_idx = int(target_idx)
-                print '%s\t%s\t%.6f' % (gene_names[TF_idx],gene_names[target_idx],score)
+                print('%s\t%s\t%.6f' % (gene_names[TF_idx],gene_names[target_idx],score))
         else:
             for i in range(nToWrite):
                 (TF_idx,target_idx,score) = vInter_sort[i]
                 TF_idx = int(TF_idx)
                 target_idx = int(target_idx)
-                print 'G%d\tG%d\t%.6f' % (TF_idx+1,target_idx+1,score)
+                print('G%d\tG%d\t%.6f' % (TF_idx+1,target_idx+1,score))
                 
                 
     
@@ -217,7 +217,7 @@ def GENIE3(expr_data,gene_names=None,regulators='all',tree_method='RF',K='sqrt',
         elif len(gene_names) != ngenes:
             raise ValueError('input argument gene_names must be a list of length p, where p is the number of columns/genes in the expr_data')
         
-    if regulators is not 'all':
+    if regulators != 'all':
         if not isinstance(regulators,(list,tuple)):
             raise ValueError('input argument regulators must be a list of gene names')
 
@@ -228,10 +228,10 @@ def GENIE3(expr_data,gene_names=None,regulators='all',tree_method='RF',K='sqrt',
             if not sIntersection:
                 raise ValueError('the genes must contain at least one candidate regulator')        
         
-    if tree_method is not 'RF' and tree_method is not 'ET':
+    if tree_method != 'RF' and tree_method != 'ET':
         raise ValueError('input argument tree_method must be "RF" (Random Forests) or "ET" (Extra-Trees)')
         
-    if K is not 'sqrt' and K is not 'all' and not isinstance(K,int): 
+    if K != 'sqrt' and K != 'all' and not isinstance(K,int): 
         raise ValueError('input argument K must be "sqrt", "all" or a stricly positive integer')
         
     if isinstance(K,int) and K <= 0:
@@ -248,15 +248,15 @@ def GENIE3(expr_data,gene_names=None,regulators='all',tree_method='RF',K='sqrt',
         raise ValueError('input argument nthreads must be a stricly positive integer')
         
     
-    print 'Tree method: ' + str(tree_method)
-    print 'K: ' + str(K)
-    print 'Number of trees: ' + str(ntrees)
-    print '\n'
+    print('Tree method: ' + str(tree_method))
+    print('K: ' + str(K))
+    print('Number of trees: ' + str(ntrees))
+    print('\n')
     
     
     # Get the indices of the candidate regulators
     if regulators == 'all':
-        input_idx = range(ngenes)
+        input_idx = list(range(ngenes))
     else:
         input_idx = [i for i, gene in enumerate(gene_names) if gene in regulators]
 
@@ -265,7 +265,7 @@ def GENIE3(expr_data,gene_names=None,regulators='all',tree_method='RF',K='sqrt',
     VIM = zeros((ngenes,ngenes))
 
     if nthreads > 1:
-        print 'running jobs on %d threads' % nthreads
+        print('running jobs on %d threads' % nthreads)
 
         input_data = list()
         for i in range(ngenes):
@@ -278,16 +278,16 @@ def GENIE3(expr_data,gene_names=None,regulators='all',tree_method='RF',K='sqrt',
             VIM[i,:] = vi
 
     else:
-        print 'running single threaded jobs'
+        print('running single threaded jobs')
         for i in range(ngenes):
-            print 'Gene %d/%d...' % (i+1,ngenes)
+            print('Gene %d/%d...' % (i+1,ngenes))
             
             VIM[i,:] = GENIE3_single(expr_data,i,input_idx,tree_method,K,ntrees)
    
     VIM = transpose(VIM)
    
     time_end = time.time()
-    print "Elapsed time: %.2f seconds" % (time_end - time_start)
+    print("Elapsed time: %.2f seconds" % (time_end - time_start))
 
     return VIM
     
@@ -416,7 +416,7 @@ def GENIE3_mark(expr_data,gen_data,gene_names=None,regulators='all',tree_method=
         elif len(gene_names) != ngenes:
             raise ValueError('input argument gene_names must be a list of length p, where p is the number of columns/genes in the expression data')
         
-    if regulators is not 'all':
+    if regulators != 'all':
         if not isinstance(regulators,(list,tuple)):
             raise ValueError('input argument regulators must be a list of gene names')
 
@@ -427,10 +427,10 @@ def GENIE3_mark(expr_data,gen_data,gene_names=None,regulators='all',tree_method=
             if not sIntersection:
                 raise ValueError('The genes must contain at least one candidate regulator')        
         
-    if tree_method is not 'RF' and tree_method is not 'ET':
+    if tree_method != 'RF' and tree_method != 'ET':
         raise ValueError('input argument tree_method must be "RF" (Random Forests) or "ET" (Extra-Trees)')
         
-    if K is not 'sqrt' and K is not 'all' and not isinstance(K,int): 
+    if K != 'sqrt' and K != 'all' and not isinstance(K,int): 
         raise ValueError('input argument K must be "sqrt", "all" or a stricly positive integer')
         
     if isinstance(K,int) and K <= 0:
@@ -447,14 +447,14 @@ def GENIE3_mark(expr_data,gen_data,gene_names=None,regulators='all',tree_method=
         raise ValueError('input argument nthreads must be a stricly positive integer')
         
         
-    print 'Tree method: ' + str(tree_method)
-    print 'K: ' + str(K)
-    print 'Number of trees: ' + str(ntrees)
-    print '\n'
+    print('Tree method: ' + str(tree_method))
+    print('K: ' + str(K))
+    print('Number of trees: ' + str(ntrees))
+    print('\n')
     
     # Get the indices of the candidate regulators
     if regulators == 'all':
-        input_idx = range(ngenes)
+        input_idx = list(range(ngenes))
     else:
         input_idx = [i for i, gene in enumerate(gene_names) if gene in regulators]
 
@@ -463,7 +463,7 @@ def GENIE3_mark(expr_data,gen_data,gene_names=None,regulators='all',tree_method=
     VIM = zeros((ngenes,ngenes))
     
     if nthreads > 1:
-        print 'running jobs on %d threads' % nthreads
+        print('running jobs on %d threads' % nthreads)
         
         input_data = list()
         for i in range(ngenes):
@@ -476,16 +476,16 @@ def GENIE3_mark(expr_data,gen_data,gene_names=None,regulators='all',tree_method=
             VIM[i,:] = vi
             
     else:
-        print 'running single threaded jobs'
+        print('running single threaded jobs')
         for i in range(ngenes):
-            print 'Gene %d/%d...' % (i+1,ngenes)
+            print('Gene %d/%d...' % (i+1,ngenes))
             
             VIM[i,:] = GENIE3_mark_single(expr_data,gen_data,i,input_idx,tree_method,K,ntrees)
         
     VIM = transpose(VIM)
     
     time_end = time.time()
-    print "Elapsed time: %.2f seconds" % (time_end - time_start)
+    print("Elapsed time: %.2f seconds" % (time_end - time_start))
 
     return VIM
     
@@ -624,7 +624,7 @@ def GENIE3_SG_sep(expr_data,gen_data,gene_names=None,regulators='all',tree_metho
         elif len(gene_names) != ngenes:
             raise ValueError('input argument gene_names must be a list of length p, where p is the number of columns/genes in the expression data')
         
-    if regulators is not 'all':
+    if regulators != 'all':
         if not isinstance(regulators,(list,tuple)):
             raise ValueError('input argument regulators must be a list of gene names')
 
@@ -635,10 +635,10 @@ def GENIE3_SG_sep(expr_data,gen_data,gene_names=None,regulators='all',tree_metho
             if not sIntersection:
                 raise ValueError('The genes must contain at least one candidate regulator')        
         
-    if tree_method is not 'RF' and tree_method is not 'ET':
+    if tree_method != 'RF' and tree_method != 'ET':
         raise ValueError('input argument tree_method must be "RF" (Random Forests) or "ET" (Extra-Trees)')
         
-    if K is not 'sqrt' and K is not 'all' and not isinstance(K,int): 
+    if K != 'sqrt' and K != 'all' and not isinstance(K,int): 
         raise ValueError('input argument K must be "sqrt", "all" or a stricly positive integer')
         
     if isinstance(K,int) and K <= 0:
@@ -655,10 +655,10 @@ def GENIE3_SG_sep(expr_data,gen_data,gene_names=None,regulators='all',tree_metho
         raise ValueError('input argument nthreads must be a stricly positive integer')
         
     
-    print '\nLearning tree models from expression data...'
+    print('\nLearning tree models from expression data...')
     VIM_expr = GENIE3(expr_data,gene_names=gene_names,regulators=regulators,tree_method=tree_method,K=K,ntrees=ntrees,nthreads=nthreads)
     
-    print '\nLearning tree models from genotype data...'
+    print('\nLearning tree models from genotype data...')
     VIM_gen = GENIE3_mark(expr_data,gen_data,gene_names=gene_names,regulators=regulators,tree_method=tree_method,K=K,ntrees=ntrees,nthreads=nthreads)
     
     VIM_sum = VIM_expr + VIM_gen
@@ -753,7 +753,7 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
         elif len(gene_names) != ngenes:
             raise ValueError('input argument gene_names must be a list of length p, where p is the number of columns/genes in the expression data')
         
-    if regulators is not 'all':
+    if regulators != 'all':
         if not isinstance(regulators,(list,tuple)):
             raise ValueError('input argument regulators must be a list of gene names')
 
@@ -764,10 +764,10 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
             if not sIntersection:
                 raise ValueError('The genes must contain at least one candidate regulator')        
         
-    if tree_method is not 'RF' and tree_method is not 'ET':
+    if tree_method != 'RF' and tree_method != 'ET':
         raise ValueError('input argument tree_method must be "RF" (Random Forests) or "ET" (Extra-Trees)')
         
-    if K is not 'sqrt' and K is not 'all' and not isinstance(K,int): 
+    if K != 'sqrt' and K != 'all' and not isinstance(K,int): 
         raise ValueError('input argument K must be "sqrt", "all" or a stricly positive integer')
         
     if isinstance(K,int) and K <= 0:
@@ -784,15 +784,15 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
         raise ValueError('input argument nthreads must be a stricly positive integer')
         
     
-    print 'Tree method: ' + str(tree_method)
-    print 'K: ' + str(K)
-    print 'Number of trees: ' + str(ntrees)
-    print '\n'
+    print('Tree method: ' + str(tree_method))
+    print('K: ' + str(K))
+    print('Number of trees: ' + str(ntrees))
+    print('\n')
         
         
     # Get the indices of the candidate regulators
     if regulators == 'all':
-        input_idx = range(ngenes)
+        input_idx = list(range(ngenes))
     else:
         input_idx = [i for i, gene in enumerate(gene_names) if gene in regulators]
         
@@ -805,7 +805,7 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
     
     
     if nthreads > 1:
-        print 'running jobs on %d threads' % nthreads
+        print('running jobs on %d threads' % nthreads)
 
         input_data = list()
         for i in range(ngenes):
@@ -824,9 +824,9 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
             VIM_prod[i,:] = vi_prod
             
     else:
-        print 'running single threaded jobs'
+        print('running single threaded jobs')
         for i in range(ngenes):
-            print 'Gene %d/%d...' % (i+1,ngenes)
+            print('Gene %d/%d...' % (i+1,ngenes))
             
             (vi_expr,vi_gen,vi_sum,vi_prod) = GENIE3_SG_joint_single(expr_data,gen_data,i,input_idx,tree_method,K,ntrees)
             VIM_expr[i,:] = vi_expr
@@ -841,7 +841,7 @@ def GENIE3_SG_joint(expr_data,gen_data,gene_names=None,regulators='all',tree_met
     VIM_prod = transpose(VIM_prod)
     
     time_end = time.time()
-    print "Elapsed time: %.2f seconds" % (time_end - time_start)
+    print("Elapsed time: %.2f seconds" % (time_end - time_start))
 
     return VIM_expr,VIM_gen,VIM_sum,VIM_prod
 
